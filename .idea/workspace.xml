@@ -38,7 +38,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for add_new_group.add_new_group.test_add_new_group">
+  <component name="RunManager" selected="Python tests.pytest in add_new_group.py">
     <configuration name="pytest for add_new_group.add_new_group" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="Addressbook" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -101,10 +101,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in add_new_group.py" />
         <item itemvalue="Python tests.pytest for add_new_group.add_new_group.test_add_new_group" />
         <item itemvalue="Python tests.pytest for add_new_group.add_new_group" />
         <item itemvalue="Python tests.pytest for add_new_group.add_new_group.test_add_empty_group" />
-        <item itemvalue="Python tests.pytest in add_new_group.py" />
       </list>
     </recent_temporary>
   </component>
