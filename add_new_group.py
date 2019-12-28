@@ -9,16 +9,13 @@ class add_new_group(unittest.TestCase):
         self.driver.implicitly_wait(30)
     
     def test_add_new_group(self):
-        driver = self.driver
         self.login(username="admin", password="secret")
         self.create_group(Group(name="First", header="somt", footer="ghy"))
         self.logout()
 
     def test_add_empty_group(self):
-        driver = self.driver
         self.login(username="admin", password="secret")
         self.create_group(Group(name="", header="", footer=""))
-        self.return_to_groups_page()
         self.logout()
 
     def logout(self):
