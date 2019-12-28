@@ -1,8 +1,8 @@
-from selenium import webdriver
+from selenium.webdriver import Firefox
 
 class Application:
     def __init__(self):
-        self.driver = webdriver.Firefox()
+        self.driver = Firefox()
         self.driver.implicitly_wait(30)
 
     def logout(self):
