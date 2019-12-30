@@ -1,13 +1,11 @@
 from selenium.webdriver import Firefox
+from fixture.session import SessionHelper
 
 class Application:
     def __init__(self):
         self.driver = Firefox()
         self.driver.implicitly_wait(30)
-
-    def logout(self):
-        driver = self.driver
-        driver.find_element_by_link_text("Logout").click()
+        self.session = SessionHelper(self)
 
     def return_to_groups_page(self):
         driver = self.driver
@@ -36,17 +34,6 @@ class Application:
         # open groups page
         driver = self.driver
         driver.find_element_by_link_text("groups").click()
-
-    def login(self, username, password):
-        driver = self.driver
-        self.open_home_page()
-        driver.find_element_by_name("user").clear()
-        driver.find_element_by_name("user").send_keys(username)
-        driver.find_element_by_name("pass").click()
-        driver.find_element_by_name("pass").clear()
-        driver.find_element_by_name("pass").send_keys(password)
-        driver.find_element_by_xpath(
-            "(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[2]").click()
 
     def open_home_page(self):
         driver = self.driver
