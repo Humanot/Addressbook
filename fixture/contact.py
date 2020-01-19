@@ -45,9 +45,20 @@ class ContactHelper:
 
     def edit(self, contact):
         driver = self.app.driver
-        driver.find_element_by_xpath("//*[@Title='Edit']").click()
+        self.select_edit_tool()
         self.change_field_value("mobile", contact.mobile)
         driver.find_element_by_xpath("//form[@enctype='multipart/form-data']//*[@name='update']").click()
+
+    def select_edit_tool(self):
+        driver = self.app.driver
+        driver.find_element_by_xpath("//*[@Title='Edit']").click()
+
+    def delete_first(self):
+        driver = self.app.driver
+        self.select_edit_tool()
+        driver.find_element_by_xpath("//*[@name='update' and @value='Delete']").click()
+        driver.find_element_by_css_selector('#container #content .msgbox').text == "Record successful deleted"
+
 
     def change_listbox_item(self, listbox_name, item):
         driver = self.app.driver
