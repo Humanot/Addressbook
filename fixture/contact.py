@@ -1,4 +1,5 @@
 from selenium.webdriver.support.ui import Select
+from model.group import Group
 
 class ContactHelper:
     def __init__(self, app):
@@ -6,12 +7,16 @@ class ContactHelper:
 
     def create(self, contact):
         driver = self.app.driver
-        driver.find_element_by_link_text("add new").click()
+        self.open_new_contact_page()
         self.fill_contact_form(contact)
 
         #submit_creation of contact
         driver.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         driver.find_element_by_link_text("home page").click()
+
+    def open_new_contact_page(self):
+        driver = self.app.driver
+        driver.find_element_by_link_text("add new").click()
 
     def fill_contact_form(self, contact):
         self.change_field_value("firstname", contact.firstname)
@@ -77,3 +82,14 @@ class ContactHelper:
             driver.find_element_by_name(field_name).click()
             driver.find_element_by_name(field_name).clear()
             driver.find_element_by_name(field_name).send_keys(value)
+
+    def get_group_options(self):
+        driver = self.app.driver
+        self.open_new_contact_page()
+        group_items = []
+        for item in driver.find_elements_by_css_selector(("select[name=new_group] option")):
+            text = item.text
+            group_items.append(Group(name=text))
+
+        return group_items
+
