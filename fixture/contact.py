@@ -83,6 +83,11 @@ class ContactHelper:
             driver.find_element_by_name(field_name).clear()
             driver.find_element_by_name(field_name).send_keys(value)
 
+    def count(self):
+        driver = self.app.driver
+        return len(driver.find_elements_by_name("selected[]"))
+
+
     def get_group_options(self):
         driver = self.app.driver
         self.open_new_contact_page()
