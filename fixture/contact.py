@@ -52,18 +52,25 @@ class ContactHelper:
 
     def edit(self, contact):
         driver = self.app.driver
-        self.select_edit_tool()
+        self.select_first_edit_tool()
         self.change_field_value("mobile", contact.mobile)
         driver.find_element_by_xpath("//form[@enctype='multipart/form-data']//*[@name='update']").click()
         self.contact_cache = None
 
-    def select_edit_tool(self):
+    def select_edit_tool_by_index(self, index):
+        driver = self.app.driver
+        driver.find_elements_by_xpath("//*[@Title='Edit']")[index].click()
+
+    def select_first_edit_tool(self):
         driver = self.app.driver
         driver.find_element_by_xpath("//*[@Title='Edit']").click()
 
     def delete_first(self):
+        self.delete_by_index(0)
+
+    def delete_by_index(self, index):
         driver = self.app.driver
-        self.select_edit_tool()
+        self.select_edit_tool_by_index(index)
         driver.find_element_by_xpath("//*[@name='update' and @value='Delete']").click()
         driver.find_element_by_css_selector('#container #content .msgbox').text == "Record successful deleted"
         self.contact_cache = None
@@ -89,8 +96,8 @@ class ContactHelper:
 
     def count(self):
         driver = self.app.driver
+        self.app.open_home_page()
         return len(driver.find_elements_by_name("selected[]"))
-
 
     def get_group_options(self):
         driver = self.app.driver

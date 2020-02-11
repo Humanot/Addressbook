@@ -7,14 +7,15 @@ from fixture.contact import ContactHelper
 class Application:
     def __init__(self):
         self.driver = Firefox()
-        self.driver.implicitly_wait(5)
+        #self.driver.implicitly_wait(5)
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
         self.contact = ContactHelper(self)
 
     def open_home_page(self):
         driver = self.driver
-        driver.get("http://localhost/addressbook/")
+        if not (driver.current_url.endswith("addressbook/") and len(driver.find_elements_by_css_selector("[value='Send e-Mail']")) > 0):
+            driver.get("http://localhost/addressbook/")
 
     def is_valid(self):
         try:
