@@ -14,6 +14,7 @@ class ContactHelper:
         #submit_creation of contact
         driver.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         driver.find_element_by_link_text("home page").click()
+        self.contact_cache = None
 
     def open_new_contact_page(self):
         driver = self.app.driver
@@ -54,6 +55,7 @@ class ContactHelper:
         self.select_edit_tool()
         self.change_field_value("mobile", contact.mobile)
         driver.find_element_by_xpath("//form[@enctype='multipart/form-data']//*[@name='update']").click()
+        self.contact_cache = None
 
     def select_edit_tool(self):
         driver = self.app.driver
@@ -64,6 +66,7 @@ class ContactHelper:
         self.select_edit_tool()
         driver.find_element_by_xpath("//*[@name='update' and @value='Delete']").click()
         driver.find_element_by_css_selector('#container #content .msgbox').text == "Record successful deleted"
+        self.contact_cache = None
 
 
     def change_listbox_item(self, listbox_name, item):
@@ -99,14 +102,16 @@ class ContactHelper:
 
         return group_items
 
+    contact_cache = None
     def get_contact_list(self):
-        driver = self.app.driver
-        self.app.open_home_page()
-        contacts = []
-        for row in driver.find_elements_by_name("entry"):
-            cells = row.find_elements_by_tag_name("td")
-            firstname = cells[2].text
-            lastname = cells[1].text
-            id = cells[0].find_element_by_tag_name("input").get_attribute('id')
-            contacts.append(Contact(firstname=firstname, lastname=lastname, id=id))
-        return contacts
+        if self.contact_cache is None:
+            driver = self.app.driver
+            self.app.open_home_page()
+            self.contact_cache = []
+            for row in driver.find_elements_by_name("entry"):
+                cells = row.find_elements_by_tag_name("td")
+                firstname = cells[2].text
+                lastname = cells[1].text
+                id = cells[0].find_element_by_tag_name("input").get_attribute('id')
+                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id))
+        return list(self.contact_cache)
