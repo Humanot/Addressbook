@@ -29,9 +29,9 @@ class ContactHelper:
         self.change_field_value("title", contact.title)
         self.change_field_value("company", contact.company)
         self.change_field_value("address", contact.address)
-        self.change_field_value("home", contact.home)
-        self.change_field_value("mobile", contact.mobile)
-        self.change_field_value("work", contact.work)
+        self.change_field_value("home", contact.homephone)
+        self.change_field_value("mobile", contact.mobilephone)
+        self.change_field_value("work", contact.workphone)
         self.change_field_value("fax", contact.fax)
         self.change_field_value("email", contact.email)
         self.change_field_value("email2", contact.email2)
@@ -53,7 +53,7 @@ class ContactHelper:
     def edit(self, contact):
         driver = self.app.driver
         self.select_first_edit_tool()
-        self.change_field_value("mobile", contact.mobile)
+        self.change_field_value("mobilephone", contact.mobile)
         driver.find_element_by_xpath("//form[@enctype='multipart/form-data']//*[@name='update']").click()
         self.contact_cache = None
 
@@ -109,6 +109,20 @@ class ContactHelper:
 
         return group_items
 
+    def open_edit_by_index(self, index):
+        driver = self.app.driver
+        self.app.open_home_page()
+        row = driver.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
+    def view_details_by_index(self, index):
+        driver = self.app.driver
+        self.app.open_home_page()
+        row = driver.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
+
     contact_cache = None
     def get_contact_list(self):
         if self.contact_cache is None:
@@ -120,5 +134,22 @@ class ContactHelper:
                 firstname = cells[2].text
                 lastname = cells[1].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute('id')
-                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id))
+                all_phones = cells[5].text.splitlines()
+                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id,
+                                                  homephone=all_phones[0], mobilephone=all_phones[1],
+                                                  workphone=all_phones[2], phone2=all_phones[3]))
         return list(self.contact_cache)
+
+    def get_contact_info_from_edit_page(self, index):
+        driver = self.app.driver
+        self.open_edit_by_index(index)
+        firstname = driver.find_element_by_name("firstname").get_attribute("value")
+        lastname = driver.find_element_by_name("lastname").get_attribute("value")
+        id = driver.find_element_by_name("id").get_attribute("value")
+        homephone = driver.find_element_by_name("home").get_attribute("value")
+        workphone = driver.find_element_by_name("work").get_attribute("value")
+        mobilephone = driver.find_element_by_name("mobile").get_attribute("value")
+        phone2 = driver.find_element_by_name("phone2").get_attribute("value")
+        return Contact(firstname=firstname, lastname=lastname, id=id,
+                       homephone=homephone, mobilephone=mobilephone,
+                       workphone=workphone, phone2=phone2)
