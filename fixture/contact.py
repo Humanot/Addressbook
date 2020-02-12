@@ -1,6 +1,7 @@
 from selenium.webdriver.support.ui import Select
 from model.group import Group
 from model.contact import Contact
+import re
 
 class ContactHelper:
     def __init__(self, app):
@@ -152,4 +153,15 @@ class ContactHelper:
         phone2 = driver.find_element_by_name("phone2").get_attribute("value")
         return Contact(firstname=firstname, lastname=lastname, id=id,
                        homephone=homephone, mobilephone=mobilephone,
+                       workphone=workphone, phone2=phone2)
+
+    def get_contact_from_view_page(self, index):
+        driver = self.app.driver
+        self.view_details_by_index(index)
+        text = driver.find_element_by_id("content").text
+        homephone = re.search("H: (.*)", text).group(1)
+        mobilephone = re.search("M: (.*)", text).group(1)
+        workphone = re.search("W: (.*)", text).group(1)
+        phone2 = re.search("P: (.*)", text).group(1)
+        return Contact(homephone=homephone, mobilephone=mobilephone,
                        workphone=workphone, phone2=phone2)
